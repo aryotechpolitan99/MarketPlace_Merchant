@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
+    tools:context=".Registry">
+
+    <Button
+        android:id="@+id/btn_signup"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/background_gradient"
+        android:text="Sign Up"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="16dp"
+        android:text="Already have an account, Log in."
+        android:textColor="@color/color_white"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="@id/btn_signup" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="320dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.781"
+        tools:ignore="NotSibling">
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linearlay_reg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Sign Up"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25sp" />
+
+
+
+            <EditText
+                android:id="@+id/et_firstname"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="first_name" />
+
+            <EditText
+                android:id="@+id/et_lastname"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="last_name" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="email" />
+
+            <EditText
+                android:id="@+id/et_passwordreg"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="password" />
+
+            <EditText
+                android:id="@+id/et_confirmpass"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="confirm_password" />
+
+            <EditText
+                android:id="@+id/et_ismerch"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="is_merchant" />
+
+            <EditText
+                android:id="@+id/et_merchname"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="merchant_name" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:id="@+id/checkbox_merch"
+                android:text="Sign up as a merchant too?"/>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
