@@ -30,6 +30,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.aryotech.merchant.Adapter.CategoriesAdapter;
 import com.aryotech.merchant.R;
+import com.aryotech.merchant.Utils.TokenManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.gson.Gson;
@@ -54,7 +55,7 @@ public class Update extends AppCompatActivity implements AdapterView.OnItemSelec
     ImageView imageView;
 
     EditText editProductName, editProductQty, editProductDesc, editProductPrice;
-
+    AccessToken accessToken;
     long id ;
 
     //set default request code for intent result
@@ -93,6 +94,8 @@ public class Update extends AppCompatActivity implements AdapterView.OnItemSelec
         categoryDropDown.setOnItemSelectedListener(this);
         // get all categories from server
        getAllCategories();
+
+        accessToken = TokenManager.getInstance(getSharedPreferences("pref",MODE_PRIVATE)).getToken();
 
         Product product1 = getIntent().getParcelableExtra("update");
         if (product1 != null){
@@ -240,7 +243,7 @@ public class Update extends AppCompatActivity implements AdapterView.OnItemSelec
 
     private void putProductToServer(){
 
-        final StringRequest stringRequest = new StringRequest(Request.Method.PUT, "http://210.210.154.65:4444/api/product/"+id+"/update",
+        final StringRequest stringRequest = new StringRequest(Request.Method.PUT, "http://210.210.154.65:4444/api/merchant/product/"+id+"/update",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -263,7 +266,21 @@ public class Update extends AppCompatActivity implements AdapterView.OnItemSelec
                         Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 })
+
+
         {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new Hashtable<>();
+
+                headers.put("Accept","application/json");
+                headers.put("Content-Type","application/x-www-form-urlencoded");
+                // Autirization bearer token
+                headers.put("Authorization",accessToken.getTokenType()+" "+accessToken.getAccessToken());
+                return headers;
+            }
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
