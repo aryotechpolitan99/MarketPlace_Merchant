@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -46,7 +45,6 @@ public class Login extends AppCompatActivity {
     final String MERCHANT_NAME = "merchant_name";
 
     AccessToken accessToken;
-    RequestQueue requestQueue;
 
     String firstName, lastName, email, password, confirmPassword, merchantName;
     int isMerchant = 1;
@@ -69,7 +67,7 @@ public class Login extends AppCompatActivity {
 
         if(isValidInput() == true){
             postDataRegister();
-            Intent intent = new Intent(Login.this,MainActivity.class);
+            Intent intent = new Intent(Login.this, Home.class);
             startActivity(intent);
         }
 

@@ -99,11 +99,6 @@
                 android:layout_height="40dp"
                 android:hint="confirm_password" />
 
-            <EditText
-                android:id="@+id/et_ismerch"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:hint="is_merchant" />
 
             <EditText
                 android:id="@+id/et_merchname"

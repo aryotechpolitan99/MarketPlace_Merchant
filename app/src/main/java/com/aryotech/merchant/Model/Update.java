@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class AddProduct extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class Update extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     RequestQueue requestQueue;
     Spinner categoryDropDown;
@@ -55,16 +55,18 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
 
     EditText editProductName, editProductQty, editProductDesc, editProductPrice;
 
+    long id ;
+
     //set default request code for intent result
     private int PICK_IMAGE_REQUEST = 1;
     private String productImage = null; // image string yang akan dikirim  ke server (bukan dalam bentuk gambar tapi dalam bentuk string base64.
     private String productName, productDesc, productQty, productPrice, categoryId, merchantId;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
-
 
         // Volley Queue Instance
         requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -90,7 +92,23 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
         categoryDropDown.setAdapter(categoriesAdapter);
         categoryDropDown.setOnItemSelectedListener(this);
         // get all categories from server
-        getAllCategories();
+       getAllCategories();
+
+        Product product1 = getIntent().getParcelableExtra("update");
+        if (product1 != null){
+            id = product1.getProductId();
+            editProductName.setText(product1.getProductNama());
+            editProductPrice.setText(String.valueOf(product1.getPrice()));
+            editProductQty.setText(String.valueOf(product1.getProductQty()));
+            editProductDesc.setText(product1.getProductDesc());
+
+            String baseUrl = "http://210.210.154.65:4444/storage/";
+            String url = baseUrl + product1.getProductImage();
+            Glide.with(this)
+                    .load(url)
+                    .into(imageView);
+
+        }
 
         //button choose image
         btnChoose.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +138,7 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
                     productImage = null;     // isi dengan null
                 }
 
-                postProductToServer();
+                putProductToServer();
             }
         });
     }
@@ -163,18 +181,15 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        //Toast.makeText(getApplicationContext(),String.valueOf(categoriesAdapter.getItemId(position)),Toast.LENGTH_LONG).show();
-
-        // set merchantId yang akan dikirim dari item yang dipilih dari Spinner Category, id didapat dari Object Category di adapter nya.
         this.categoryId = String.valueOf(categoriesAdapter.getItemId(position));
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        //leave it blank saja, yang penting dioverride
+
     }
-    // get image from implicit intent
+
+
 
     private void showFileChooser(){
 
@@ -212,8 +227,8 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
     }
-}
     // convert image bitmap to string base64
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -223,9 +238,9 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
         return encodedImage;
     }
 
-    private void postProductToServer(){
+    private void putProductToServer(){
 
-        final StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://210.210.154.65:4444/api/products",
+        final StringRequest stringRequest = new StringRequest(Request.Method.PUT, "http://210.210.154.65:4444/api/product/"+id+"/update",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -237,7 +252,7 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
-                        Toast.makeText(getApplicationContext(), "Success Added product", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Success Update product", Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -257,7 +272,10 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
                 params.put("productName", productName);
                 params.put("productDesc", productDesc);
                 params.put("productQty", productQty);
-                params.put("productImage", productImage);
+
+                if (productImage != null){
+                    params.put("productImage", productImage);
+                }
                 params.put("productPrice", productPrice);
                 params.put("categoryId", categoryId);
                 params.put("merchantId", merchantId);
@@ -274,5 +292,3 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
         }
     }
 }
-
-

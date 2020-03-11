@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -105,7 +106,8 @@ public class Registry extends AppCompatActivity {
                         accessToken = new Gson().fromJson(response, AccessToken.class);
 
                         TokenManager.getInstance(getSharedPreferences("pref", MODE_PRIVATE)).saveToken(accessToken);
-
+                        Toast.makeText(Registry.this, String.valueOf(accessToken.getAccessToken())
+                                , Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
