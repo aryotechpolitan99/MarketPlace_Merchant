@@ -30,6 +30,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.aryotech.merchant.Adapter.CategoriesAdapter;
 import com.aryotech.merchant.R;
+import com.aryotech.merchant.Utils.TokenManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.gson.Gson;
@@ -52,6 +53,8 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
     CategoriesAdapter categoriesAdapter;
     Button btnChoose, btnAddProduct;
     ImageView imageView;
+
+    AccessToken accessToken;
 
     EditText editProductName, editProductQty, editProductDesc, editProductPrice;
 
@@ -91,6 +94,8 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
         categoryDropDown.setOnItemSelectedListener(this);
         // get all categories from server
         getAllCategories();
+
+        accessToken = TokenManager.getInstance(getSharedPreferences("pref",MODE_PRIVATE)).getToken();
 
         //button choose image
         btnChoose.setOnClickListener(new View.OnClickListener() {
@@ -225,7 +230,7 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
 
     private void postProductToServer(){
 
-        final StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://210.210.154.65:4444/api/products",
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://210.210.154.65:4444/api/merchant/products",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -245,12 +250,24 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
                     public void onErrorResponse(VolleyError error) {
 
                         error.printStackTrace();
-                        Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"gagal added/save product",Toast.LENGTH_LONG).show();
                     }
                 })
         {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+        @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            Map<String,String> headers = new Hashtable<>();
+
+            headers.put("Accept","application/json");
+            headers.put("Content-Type","application/x-www-form-urlencoded");
+            // Autirization bearer token
+            headers.put("Authorization",accessToken.getTokenType()+" "+accessToken.getAccessToken());
+            return headers;
+        }
+
+
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
 
                 Map<String, String> params = new Hashtable<String, String>();
 
@@ -263,7 +280,9 @@ public class AddProduct extends AppCompatActivity implements AdapterView.OnItemS
                 params.put("merchantId", merchantId);
                 return params;
             }
-        };
+
+            };
+
 
         {
             int socketTimeout = 30000;
